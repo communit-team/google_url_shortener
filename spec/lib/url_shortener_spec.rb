@@ -9,7 +9,21 @@ module Google
       url = UrlShortener.shorten!(@long_url)
       url.should == @short_url
     end
-    
+
+    it "should shorten a URL and get an unique id" do
+      stub_request(Google::UrlShortener::Request::BASE_URL, :method => :post, :fixture => "shorten")
+
+      url = UrlShortener.shorten!(@long_url)
+      url.should_not == @short_url
+    end
+
+    it "should shorten a URL" do
+      stub_request(Google::UrlShortener::Request::BASE_URL, :method => :post, :fixture => "shorten")
+
+      url = UrlShortener.shorten!(@long_url)
+      url.should == @short_url
+    end
+
     it "should expand a URL" do
       stub_request(Google::UrlShortener::Request::BASE_URL + "?shortUrl=#{@short_url}&projection=FULL&key=#{@key}", :fixture => "expand")
       

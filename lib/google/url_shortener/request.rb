@@ -2,10 +2,14 @@ module Google
   module UrlShortener
     module Request
       BASE_URL = "https://www.googleapis.com/urlshortener/v1/url"
-      REQUEST_HEADERS = { :content_type => :json, :accept => :json }
+      REQUEST_HEADERS = { :content_type => :json, :accept => :json}
 
       def post(params={})
-        response = RestClient.post(format_url, format_post_params(params), REQUEST_HEADERS)
+        headers = REQUEST_HEADERS
+        if ENV['google_url_shortener_access_token']
+          headers[:Authorization] = "Bearer #{ENV['google_url_shortener_access_token']}"
+        end
+        response = RestClient.post(format_url, format_post_params(params), headers)
         parse(response)
       rescue => e
         puts e.inspect

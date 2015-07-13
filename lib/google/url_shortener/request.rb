@@ -6,8 +6,8 @@ module Google
 
       def post(params={})
         headers = REQUEST_HEADERS
-        if ENV['google_url_shortener_access_token']
-          headers[:Authorization] = "Bearer #{ENV['google_url_shortener_access_token']}"
+        if $redis.get('google_url_shortener_access_token')
+          headers[:Authorization] = "Bearer #{$redis.get('google_url_shortener_access_token')}"
         end
         response = RestClient.post(format_url, format_post_params(params), headers)
         parse(response)
